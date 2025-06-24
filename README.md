@@ -1,7 +1,6 @@
 # Reappraisal of Land, Opportunism, and Displacement in Civil Wars: Evidence from Colombia, Juan Fernando Tellez, 2022
 
-This repository contains all code and data needed to reproduce the empirical reappraisal of **Tellez (2022)**.  
-The work follows the MY457 summative-assessment specification (see `MY457_reappraisal_instructions.pdf`).
+This repository contains all code and data needed to reproduce the empirical reappraisal of **Tellez (2022)**. 
 
 ---
 

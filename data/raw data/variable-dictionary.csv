@@ -1,0 +1,59 @@
+Variable,Description,Data source,Used in
+cod_dane,Municipal identifier,CEDE,muni.rds
+year,year,CEDE,muni.rds
+disp_num,Number of people expelled from municipality,CEDE,muni.rds
+pobl_tot,Total population,CEDE,muni.rds
+palm_presence,Timing of palm-oil onset,Original,muni.rds
+lnatprod,Logged hectares of palm-oil planted in given year,Original,muni.rds
+ldisp_rate,Logged displacement rate,CEDE,muni.rds
+sdisp_rate,Inverse-sine displacement rate,CEDE,muni.rds
+disp_rate,Displacement rate (per thousand residents),CEDE,muni.rds
+total_natpalm,Hectares of palm-oil planted in given year,Original,muni.rds
+farc_attack,Number of FARC attacks,CEDE,muni.rds
+coca,Presence of coca,CEDE,muni.rds
+auc_dummy,AUC presence (dummy),CEDE,muni.rds
+farc_dummy,FARC presence (dummy),CEDE,muni.rds
+altitude,Altitude (meters),CEDE,muni.rds
+nbi,Percent of population with unsatisfied basic needs (2011),CEDE,muni.rds
+disbogota,Distance from Bogota (2009),CEDE,muni.rds
+laViol_dum,Violence during La Violencia (dummy),CEDE,muni.rds
+area_restitucion_total,Total estimated area needing restitution (in thousands of hectares).,Fondo de Tierras,fondo.rds
+area_restitucion_nosnr,"Total estimated area needing restitution (in thousands of hectares, excluding SNR figures).",Fondo de Tierras,fondo.rds
+area_restitucion_nosnr_nocatast,"Total estimated area needing restitution (in thousands of hectares, excluding both SNR and catastro figures).",Fondo de Tierras,fondo.rds
+palm,Did municipality grow palm-oil during period of study?,Fondo de Tierras,fondo.rds
+nbi,Percent of population with unsatisfied basic needs (2011),CEDE,fondo.rds
+coca,Proportion of years municipality had coca during period of study,CEDE,fondo.rds
+disbogota,Distance from Bogota (2009),CEDE,fondo.rds
+farc,Number of years with FARC presence during period of study,CEDE,fondo.rds
+auc,Number of years with AUC presence during period of study,CEDE,fondo.rds
+area_cartografica,"Total area (in 10,000s hectares)",Fondo de Tierras,fondo.rds
+rural,Proportion of population categorized as rural (2009),CEDE,fondo.rds
+altitude,Altitude (km),CEDE,fondo.rds
+pib_percapita,GDP per capita (2009),CEDE,fondo.rds
+l_area,"Average size of plots (logged, 2005)",CEDE,fondo.rds
+displace,Respondent forced to leave or abandon land due to armed conflict,LRDP,survey.rds
+displace_force2,Respondent forced to leave (excluding those who fled),LRDP,survey.rds
+palmDummy,Municipality adopted palm-oil in period of study,Original,survey.rds
+age,Age in years,LRDP,survey.rds
+ed,Years of school completed,LRDP,survey.rds
+child,Number of children,LRDP,survey.rds
+sex,"Respondent sex (1 = male, 2 = female)",LRDP,survey.rds
+hhsize,Size of household,LRDP,survey.rds
+disp_paras,Respondent claims displaced by elites and/or paramilitaries,LRDP,survey.rds
+land_owned,Respondent estimates amount of land owned before displacement,LRDP,survey.rds
+claimant,Respondent faces competing claimant in restitution process,LRDP,survey.rds
+disp_why_land,Respondent claims they were displaced because someone wanted their land,LRDP,survey.rds
+food_endorse,Endorsement experiment outcome variable (food policy),LRDP,survey.rds
+land_endorse,Endorsement experiment outcome variable (land policy),LRDP,survey.rds
+coca_endorse,Endorsement experiment outcome variable (coca policy),LRDP,survey.rds
+food_treat,Treatment indicator for endorsement experiment (food policy),LRDP,survey.rds
+land_treat,Treatment indicator for endorsement experiment (land policy),LRDP,survey.rds
+coca_treat,Treatment indicator for endorsement experiment (coca policy),LRDP,survey.rds
+lwage,Log of real hourly wage,"Dube and Vargas, 2013",wages.rds
+palm_presence,Timing of palm-oil onset,Original,wages.rds
+gender,"Respondent gender (0 = male, 1 = female)","Dube and Vargas, 2013",wages.rds
+married,Respondent married (dummy),"Dube and Vargas, 2013",wages.rds
+edyrs,Years of education completed,"Dube and Vargas, 2013",wages.rds
+coca,Presence of coca (dummy),"Dube and Vargas, 2013",wages.rds
+cod_dane,Municipal identifier,CEDE,wages.rds
+year,year,CEDE,wages.rds

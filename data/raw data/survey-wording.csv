@@ -1,0 +1,19 @@
+Variable,Description,Survey wording (if relevant),Data source,Used in
+displace,Respondent forced to leave or abandon land due to armed conflict,D4. Have you ever been forced to leave your land or had to abandon your land as a result of armed conflict?,LRDP,survey.rds
+displace_force2,Respondent forced to leave (excluding those who fled),D4. Have you ever been forced to leave your land or had to abandon your land as a result of armed conflict?,LRDP,survey.rds
+palmDummy,Municipality adopted palm-oil in period of study,See Appendix,Original,survey.rds
+age,Age in years,B4. In what year were you born?,LRDP,survey.rds
+ed,Years of school completed,B14. How many years of formal school have you completed?,LRDP,survey.rds
+child,Number of children,B2. How many children under the age of 13 live in this household?,LRDP,survey.rds
+sex,"Respondent sex (1 = male, 2 = female)",B3. Sex of the respondent,LRDP,survey.rds
+hhsize,Size of household,B1. How many people in total live in this household at this time?,LRDP,survey.rds
+disp_paras,Respondent claims displaced by elites and/or paramilitaries,D6. What groups were responsible for your displacement?,LRDP,survey.rds
+land_owned,Respondent estimates amount of land owned before displacement,D8. What size of land were you displaced from?,LRDP,survey.rds
+claimant,Respondent faces competing claimant in restitution process,E8. Does/did your [restitution] case have another claimant?,LRDP,survey.rds
+disp_why_land,Respondent claims they were displaced because someone wanted their land,D5. Why were you forced to leave or abandon your land?,LRDP,survey.rds
+food_endorse,Endorsement experiment outcome variable (food policy),See Appendix,LRDP,survey.rds
+land_endorse,Endorsement experiment outcome variable (land policy),See Appendix,LRDP,survey.rds
+coca_endorse,Endorsement experiment outcome variable (coca policy),See Appendix,LRDP,survey.rds
+food_treat,Treatment indicator for endorsement experiment (food policy),See Appendix,LRDP,survey.rds
+land_treat,Treatment indicator for endorsement experiment (land policy),See Appendix,LRDP,survey.rds
+coca_treat,Treatment indicator for endorsement experiment (coca policy),See Appendix,LRDP,survey.rds

@@ -1,0 +1,517 @@
+---
+title: "Reappraisal of Tellez (2022) - Land Opportunism and Displacement in Civil Wars"
+date:  "`r format(Sys.time(), '%a/%d/%b')`"
+author: "46673"
+always_allow_html: true
+output: 
+  bookdown::pdf_document2:
+    toc: false
+header-includes:
+  - \usepackage{float}
+---
+
+```{r setup, include = FALSE}
+# set global options 
+knitr::opts_chunk$set(
+  echo=FALSE, 
+  warning=FALSE, 
+  message=FALSE, 
+  linewidth=60,
+  fig.pos = "H",
+  fig.align = "center"
+  )
+
+# library import:
+source(file = "../code/package_manager.R")
+update_geom_defaults("text", list(family = "sans"))
+
+# other options:
+options(scipen=999)
+
+# run analysis scripts
+source(file = "../code/analysis/replication-analysis.R")
+source(file = "../code/analysis/callaway-analysis.R")
+source(file = "../code/analysis/assumption-tests.R")
+```
+
+# 1  Introduction  {-}
+
+The displacement of people from their homes is an ever-present consequence of 
+war, as demonstrated by the tragic ongoing conflicts in Palestine, Sudan, and 
+Ukraine: which have led to the forced displacement of many families over the 
+course of the conflict. The resulting 
+humanitarian crises warrant a focus on identifying the drivers of conflict-led
+displacement, where identifying the causal mechanism that gives rise to 
+displacement may shed light on how these humanitarian crises are likely to 
+unfold. Tellez (2022) proposes to study the effect of opportunism as an 
+underlying motivation for civilian displacement during a conflict, leveraging 
+the introduction of palm plantations during the Colombian civil war as an 
+indication of the potential for opportunistic displacement. They argue that the
+expansion of the African palm oil industry in the 1990s led to an increase in 
+the demand for land, resulting in the opportunistic acquisition of land via 
+the forced displacement of civilians with the help of armed militant groups. To
+this end, they implement a difference-in-difference design at the municipal-
+year level utilising a panel dataset that includes an indicator variable for
+the presence of palm oil plantations and the displacement rate in a given 
+municipality during a given year.
+
+They conclude that the years in which municipalities begin and continue the 
+expansion of local palm oil industries record higher rates of civilian 
+displacement compared to before they adopted the industry. They go on to model 
+and conclude that this increased displacement is more pronounced in years where
+palm-oil production is higher, and when a municipality has a historical record 
+of paramilitary presence. In addition, they show that this relationship does not 
+exist in municipalities with historical left-wing guerrilla presence, 
+observing that opportunistic displacement is therefore reliant on the elite-
+capture of the state, and not on violence alone.
+
+While the author uses both municipal-level data and a household-level survey to
+substantiate their claims, the difference-in-difference study is of particular
+interest here as it requires a number of underlying assumptions to be true for 
+its causal conclusions to hold water. I subject the author's research design to 
+a battery of tests to investigate the validity of the conclusions they make, 
+first reproducing select yet important parts of their analysis, and then 
+providing evidence that the research design and analysis conducted by Tellez 
+does not satisfy the necessary conditions to draw a clear causal relationship
+between palm oil production and opportunistic displacement.
+
+# 2  Research-Design and Background  {-}
+
+The author uses a two-way fixed effects model (TWFE) to implement their diff-in-
+diff design, regressing the inverse-sine-transformed displacement rate per
+thousand residents on an indicator dummy variable recording the presence of a 
+palm plantation in the municipality. As previously stated, the study is 
+conducted at the municipality-year level. Further, they control for the number 
+of left-wing guerrilla attacks and the presence of coca cultivation in the 
+municipality in a given year, suggesting that guerrilla group behaviour and 
+changes to the drug trade are likely to affect the costs of palm oil production
+and thereby palm oil adoption within a municipality. These variables may affect 
+displacement confounding the results: where municipalities with a higher 
+guerrilla presence may have higher levels of conflict, resulting in a higher rate 
+of forced displacement: and the presence of the drug trade in a municipality may 
+induce opportunistic displacement due to coca cultivation.
+
+$$
+dispRate_{it} = \alpha_i + \omega_t + \beta \: palmOil_{it} + \phi \: X_{it} + \epsilon_{it}
+$$
+The adoption of palm oil within a municipality acts as the treatment assignment
+where the treatment of a municipality is conditioned on coca cultivation, 
+guerrilla presence, and the fixed effects are assumed to be as-if random 
+resulting in a potential displacement rate that is independent of treatment. A 
+further set of assumptions is required for the author's causal mechanism to 
+hold, given that a TWFE model is applied to a dataset with staggered treatment 
+timing. First, there should be no interference between municipalities, where in 
+the case of the current research design, the treatment of any municipality 
+should not spill over to another municipality. This assumption can be violated 
+when palm oil adoption in a municipality causes palm oil adoption in its 
+neighbouring municipalities, resulting in a spillover effect. Second, we require 
+the conditional parallel trends assumption to hold, where the trend of the 
+potential displacement rate for the treated municipalities if they were 
+untreated should remain in parallel with the untreated municipalities' trend, 
+conditional on the other covariates. Third, opportunists within municipalities 
+must not anticipate the adoption of palm oil resulting in an early increase in 
+the displacement rate, termed the no-anticipation assumption. Lastly, we require 
+a homogeneous treatment effect over time. 
+
+Once these assumptions are satisfied, the $\beta$ parameter identifies the TWFE
+treatment effect estimand, allowing the author to conclude that palm oil 
+adoption results in an increase in the displacement rate driven by opportunism, 
+given that their transfer mechanism is justified. However, can we be sure these
+assumptions are satisfied? While the author uses a Sun & Abraham and
+synthetic control study to provide further evidence in favour of their 
+conclusions, a more thorough set of tests are required to validate the causal 
+conclusions made. Additionally, a static TWFE model is most appropriate when
+there are no staggered treatment timings with heterogeneous treatment effects. 
+Therefore, I propose a Callaway & Sant'Anna model which I implement and compare 
+against the author's model choice to account for the characteristics of the 
+research design.
+
+# 3  Data  {-}
+
+I download the raw municipality dataset from the author's online appendix 
+repository, including any code used to replicate the results in R. The 
+attached muni.rds file is briefly cleaned by reformatting some variables to 
+make future exploratory and replicative analysis more convenient. I use the 
+code provided by the author, making minor changes where necessary to replicate 
+the analysis. Additionally, I access the Marco geoestadístico nacional MGN2005
+shapefile datasets available on the Colombian National Administrative Department 
+of Statistics website, providing me with fine-grained geospatial information 
+on the municipalities with identification codes in line with the author's data.
+
+The municipality data includes forced displacement counts provided by the 
+Colombian Victim’s Unit, the palm oil indicator variable and palm oil production
+values collected from the National Federation of Palm Oil Growers of Colombia. 
+Alongside these variables, the author provides indicator functions that measure 
+the historical presence of FARC (paramilitary) and AUC (guerrilla) groups used 
+as controls in the study.
+
+# 4  Replication of The Original Results  {-}
+
+The results of the municipal-level analysis are replicated in Figure 1A, 2 
+and Table 1 below. As Tellez discusses, Figure 1A suggests that the displacement 
+rate is approximately similar between treated and control municipalities 
+at the beginning of the 1990s. The rate subsequently diverges from the 2000s 
+onward, indicating that the treatment effect may begin to take effect further 
+into treatment. While the author makes an argument based on changes in the 
+displacement rate, they proceed to conduct their diff-in-diff analysis using
+the inverse-sine displacement rate. The same graph as 1A using the 
+transformed rate is depicted in Figure 1B. First, the rate is distinctly 
+different between both groups from the onset of the study. Second, the 
+divergence in the rate between the two groups is not as pronounced after the 
+transformation. These observations dampen the conclusion that Tellez makes where 
+they state that "... Figure 1 below foreshadows some of the results of the 
+analysis."
+
+```{r displacement-plots, fig.cap="Displacement Rate for treated and control municipalities over time."}
+f1 <- f1 + labs(title = "Figure 1A")
+f2 <- f2 + labs(title = "Figure 1B")
+
+shared_theme <- theme(
+  plot.title.position = "plot", 
+  plot.title           = element_text(size = 8, hjust = 0.5),
+  plot.margin          = margin(10, 5, 5, 5)
+)
+
+combo <- (f1 + f2) +
+  plot_layout(ncol = 2, widths = c(1,1)) &
+  shared_theme & 
+  theme(
+    plot.background = element_rect(
+      colour = "black",   
+      size   = 0.5,       
+      fill   = NA         
+    ),
+    plot.margin = margin(5,5,5,5)
+  )
+
+combo
+```
+
+The author goes on to construct four models, the results of which are depicted 
+in Table 1 below. The results accurately depict a TWFE generalised diff-in-diff
+design, modelling the effect of palm oil adoption on the inverse-sine transformed 
+displacement rate. It is important to note that models 1, 2, and 3 only vary in 
+terms of a single coefficient that interacts with the treatment variable of interest 
+with the plantation treatment indicator. Given the model specification and 
+underlying assumptions are accurate, the treatment effect under the study design
+is positive, indicating that palm-oil adoption results in an increase in the 
+forced displacement rate. Additionally, models 2 and 3 suggest that the increase
+in the rate are driven both by increased production of palm-oil, and the 
+presence of paramilitary groups. However, in both these models, the treatment 
+effect coefficient flips sign, indicating that the baseline displacement rate
+reduces with the adoption of a plantation, increasing only after a certain level 
+of palm oil production or para-military presence is reached. Model 4 confirms 
+the author's conclusion that the presence of guerrilla groups is not a 
+significant determinant of displacement. Further, the marginal effect of palm
+oil production and the presence of paramilitary groups are reproduced in 
+
+Figure 2 below. 
+
+\begin{table}[!htbp] \centering 
+  \caption{Effect of palm-oil growth on displacement. Models include municipal 
+  and year fixed effects and controls for time-varying presence of coca and FARC 
+  attacks.} 
+  \label{palm-pres-mods} 
+\begin{tabular}{@{\extracolsep{5pt}}lcccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{4}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-5} 
+\\[-1.8ex] & \multicolumn{4}{c}{Displacement rate (inverse-sine transformation)} \\ 
+\\[-1.8ex] & (1) & (2) & (3) & (4)\\ 
+\hline \\[-1.8ex] 
+ Palm-oil plantation & 0.382$^{***}$ & $-$2.056$^{***}$ & $-$1.213$^{***}$ & 0.692 \\ 
+  & (0.120) & (0.642) & (0.023) & (0.548) \\ 
+  & & & & \\ 
+ Plantation X Natl Prod (log) &  & 0.248$^{***}$ &  &  \\ 
+  &  & (0.063) &  &  \\ 
+  & & & & \\ 
+ Plantation X AUC presence (dummy) &  &  & 1.614$^{***}$ &  \\ 
+  &  &  & (0.120) &  \\ 
+  & & & & \\ 
+ Plantation X FARC presence (dummy) &  &  &  & $-$0.327 \\ 
+  &  &  &  & (0.559) \\ 
+  & & & & \\ 
+\hline \\[-1.8ex] 
+Observations & 14,192 & 14,192 & 14,192 & 14,208 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+```{r marginal-plots, fig.cap="Marginal effect of palm oil production and para-military presence."}
+p1 + p2 + 
+  plot_layout(ncol = 2, widths = c(1,1)) & 
+  theme(
+    plot.background = element_rect(
+      colour = "black",   
+      size   = 0.5,       
+      fill   = NA         
+    ),
+    plot.margin = margin(5,5,5,5)
+  )
+```
+
+# 5  Alternative Estimation Using Callaway & Sant’Anna  {-}
+
+I estimate the group-time ATT according to the Callaway & Sant'Anna study design
+to account for the staggered treatment timing inherent in the data. I utilise a 
+doubly-robust estimation procedure with 1000 bootstrap samples. The design has 
+the added benefit of loosening the homogeneous treatment effect assumption 
+required by a TWFE design. The group-time ATTs with the same group-time 
+differences are averaged to compute the relative time ATT presented in Figure 3. 
+Further, the simple average and weighted average ATT are presented in Table 2. 
+
+```{r csa-plot, fig.cap="Relative-Time ATT based on the Callaway \\& Sant'Anna model."}
+csa_plot + 
+  theme(
+    plot.background = element_rect(
+      colour = "black",   
+      size   = 0.5,       
+      fill   = NA         
+    ),
+    plot.margin = margin(5,5,5,5)
+  )
+```
+
+While the $\beta$ coefficient of the TWFE model presented a significantly 
+positive relationship between palm oil adoption and displacement, both the 
+simple and weighted average ATT under the Callaway & Sant'Anna model indicate
+that there may be no overall effect, disputing the author's claims. The 
+relative-time ATTs plotted in Figure 2 provide a more interesting picture, 
+hinting at potential assumption violations that will require further tests to 
+confirm. First, the post-treatment ATT remains around 0 for the first three 
+years following treatment before rising to approximately 50% on average in the
+fourth and fifth post-treatment years. This suggests that the treatment effect 
+may begin to take effect later in treatment, similar to the author's conclusion
+based on their plots in Figure 1 and appendix Figure A4. Second, the dip in the
+pre-treatment ATT at the third and fourth years indicates that the inverse-sine 
+displacement rate of soon-to-be treated municipalities defer from the control 
+group municipalities, suggesting a potential violation of the parallel trends 
+assumption. I test for these assumption violations next, as their results may
+bring the authors' design, and thereby their conclusions, into question.
+
+```{r csa-table}
+df_table <- tibble::tribble(
+  ~Measure,                               ~ATT,     ~SE,    ~`CI low`,  ~`CI high`,
+  "Simple avg (equal‐wt across g,t)",     -0.0698,  0.361,   -0.777,    0.638,
+  "Weighted avg (wt by group size)",      0.0519,  0.186,   -0.313,    0.417
+)
+
+df_table %>%
+  kable(
+    format    = "latex",
+    booktabs  = TRUE,
+    caption   = "ATT estimates: simple vs. weighted average",
+    label     = "tab-att"
+  ) %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
+# 6  Diagnostic and Falsification Tests  {-}
+
+I leverage four diagnostic and falsification tests to identify any potential 
+violations of the key assumptions made in the two models above. First, the 
+Goodman-Bacon decomposition is used to identify the determinants of the 
+treatment effect estimated by the TWFE model. Once identified, we can reason as 
+to how much of the effect results from comparing treated-vs-untreated 
+municipalities. Second, a parallel trends test on the original TWFE model 
+specification as well as a Sun and Abraham (2020) specification are utilised to 
+provide multiple comparative viewpoints as to whether the parallel trends 
+assumption is likely to be violated. Third, I test the no-interference 
+assumption under SUTVA by testing for possible spillover effects from 
+neighbouring treated municipalities: using geospatial data to identify 
+neighbouring municipalities. Finally, I perform a test for no anticipation, 
+using placebo treatment years in the past to test for any significant 
+anticipatory ATT.
+
+## 6.1  Goodman-Bacon Decomposition {-}
+
+The Goodman-Bacon decomposition indicates that most of the identifying variation 
+in the TWFE estimate comes from comparing municipalities that receive treatment 
+with municipalities that are never treated, resulting in a positive treatment 
+effect. Further, it implies that the bias from already-treated controls is 
+small. Given that the TWFE estimate is an amalgamation of different 2x2 
+comparisons, the decomposition results reflect positively on the 
+interpretability of the estimate as a comparison of treated municipalities vs
+untreated control municipalities. 
+
+```{r bacon-table, results='asis'}
+library(knitr)
+
+bacon_table <- data.frame(
+  Comparison      = c("Both Treated",
+                      "Later vs Always Treated",
+                      "Treated vs Untreated"),
+  Weight          = c(0.00958, 0.04427, 0.94615),
+  Avg_Estimate    = c(0.10943, 0.09587, 0.43840)
+)
+
+bacon_table %>%
+  kable(
+    format    = "latex",
+    booktabs  = TRUE,
+    caption   = "Goodman-Bacon decomposition of the TWFE estimate",
+    col.names = c("Comparison", "Weight", "Average Estimate"),
+    digits    = c(NA, 5, 5)
+    ) %>%
+  kable_styling(latex_options = c("hold_position"))
+```
+
+## 6.2  Parallel-Trends Test  {-}
+
+The parallel trends assumption is tested using the relative-time ATTs from three 
+different designs. Specifically, the Callaway and Sant'Anna specification in 
+Figure 3 above and a dynamic TWFE, and Sun & Abraham specification, the results 
+of which are depicted in Figure 4 below. Comparing the pre-treatment ATTs reveal
+a shortcoming in the application of a TWFE model to a study with staggered 
+treatment timing. The dynamic TWFE plot depicts a clear negative pre-treatment 
+effect likely resulting from bias' given comparisons between "to be treated" and 
+treated municipalities: comparisons that are dropped in the other designs 
+resulting in next to no pre-treatment effect. Therefore, the parallel trends 
+assumption is likely to hold given the pre-treatment effects in the Callaway and
+Sun designs, corroborating Tellez's conclusions. However, I suggest some caution
+when interpreting these results given the negative pre-treatment effect observed 
+in the Callaway & Sant'Ana specification.
+
+```{r pretrend-wald, fig.cap="Parallel trends test using a dynamic TWFE design and Sun and Abraham's design"}
+ptrend_plot + 
+  theme(
+    plot.background = element_rect(
+      colour = "black",   
+      size   = 0.5,       
+      fill   = NA         
+    ),
+    plot.margin = margin(5,5,5,5)
+  )
+```
+
+## 6.3  Spillover (No-Interference) Test {-}
+
+To conduct a spillover hypothesis test, I first use geospatial data obtained 
+from the Colombian National Administrative Department of Statistics to identify 
+neighboring municipalities, by selecting a municipality as a neighbor if the 
+distance between the centroid of two municipalities is less than or equal to 
+50 km. Once all neighbours are determined, I create a variable that records the 
+proportion of treated neighbors in the previous year for each municipality-year 
+record in the dataset. Given that the "did" package was used to implement the 
+Callaway & Sant'Anna design does not currently implement a method to interact 
+a spillover variable, I interact the spillover variable with each relative-time 
+indicator in a dynamic TWFE model to estimate the spillover coefficients. 
+Finally, a Wald hypothesis test is applied to the joint pre-treatment spillover 
+coefficients to determine if a spillover effect is likely, the results of which
+are displayed in Table 4 below. A p-value below 0.01 suggests that there is
+strong evidence to reject the hypothesis that there is no spillover effect. This
+should lead us to question if the no-interference assumption is likely to be 
+satisfied, in this study design.
+
+```{r spillover-test}
+stat  <- wald_res$stat      
+pval  <- wald_res$p        
+df1   <- wald_res$df1          
+df2   <- wald_res$df2
+
+hyp <- "$H_0$: $\\beta_{relative\\_time=-10:spillover} = \\dots$ \\\\ $= 
+\\beta_{relative\\_time=-2:spillover} = 0$"
+
+test_tbl <- data.frame(
+  Hypothesis = hyp,
+  `Test Statistic`= stat,
+  `P-value` = pval,
+  `DF (num.)` = df1,
+  `DF (den.)` = df2,
+  check.names = FALSE,
+  stringsAsFactors = FALSE
+)
+
+test_tbl %>% kable(
+  format = "latex",
+  booktabs = TRUE,
+  caption = "Wald test for the joint nullity of the pre-treatment spillover coefficients",
+  escape = FALSE,
+  digits = c(3)
+) %>%
+    kable_styling(latex_options = c("hold_position"))
+```
+
+## 6.4  No-Anticipation Placebo Test {-}
+
+Finally, I subtract 2 years and 3 years from the treatment year 
+variables, dropping any treatment years that fall below the minimum year of the 
+study to create a placebo treatment indicator. This placebo is used as the 
+treatment variable in two Callaway & Sant'Anna models, the results of which are
+depicted in Figures 5A and 5B, respectively. The post-treatment ATTs in the 2-year
+model hover close to or just below zero, which suggests that the no-anticipation
+assumption is likely to hold. However, the 3-year model identifies a negative 
+ATT across all post-treatment years. While this may suggest a violation of the 
+no-anticipation assumption; it may be a potential artefact of the negative 
+pre-treatment ATT observed in the parallel trends test. Altogether, some caution 
+is advised in the interpretation of all model coefficients, given the anomalous 
+observations in both tests.
+
+```{r placebo-test, fig.cap = "Callaway \\& Sant'Anna placebo (no-anticipation) test."}
+placebo_plot_1  <- placebo_plot_1 + 
+  labs(title = "Figure 5A - placebo treatment 2 years before")
+placebo_plot_2  <- placebo_plot_2 + 
+  labs(title = "Figure 5B - placebo treatment 3 years before")
+
+shared_theme <- theme(
+  plot.title.position = "plot", 
+  plot.title = element_text(size = 8, hjust = 0.5),
+  plot.margin = margin(10, 5, 5, 5)
+)
+
+placebo_plot_1 + placebo_plot_2 +
+  plot_layout(ncol = 2, widths = c(1,1)) &
+  shared_theme & 
+  theme(
+    plot.background = element_rect(
+      colour = "black",   
+      size = 0.5,       
+      fill = NA         
+    ),
+    plot.margin = margin(5,5,5,5)
+  )
+```
+
+# 7  Conclusion  {-}
+
+While a TWFE model does not always result in a convenient interpretation of the 
+ATT due to the different components that make up the estimand given a staggered
+treatment timing, the Goodman-Bacon decomposition does provide some solace in 
+that the comparison being made is between the treated and the untreated 
+resulting in a believable Average Treatment Effect that is not exposed to any
+negatively weighted components. However, the ability for the specification to 
+identify this ATT depends on a series of strict assumptions. The tests conducted 
+provide evidence to reject the no-interference assumption and cast some doubt 
+on the validity of the parallel trends and no-anticipation assumption: although 
+the jury is not yet out on this front. Therefore, I suggest some caution when 
+interpreting the author's central claim, that the adoption of palm oil within 
+a municipality results in an increase in forced displacement driven by an
+opportunistic elite-state interaction. 
+
+I provide an alternative model (Callaway & Sant'Anna), alongside the generalised 
+TWFE model and the Sun and Abraham model included in the author's online 
+appendix, that make valid comparisons between treated and untreated 
+municipalities providing further support in favour of the author's claim that the
+ATT is significant and positive at some post-treatment years. However, it is 
+important that future work include additional controls that may improve
+the validity of making a conditional parallel trends assumption. Alternatively, 
+the parallel trends assumption may hold when using the raw displacement rate or 
+log displacement rate, given that the parallel trends assumption is sensitive to 
+the functional form of the response variable. Additionally, I suggest purging 
+the spillover effect before model estimation which may result in a more
+believable group-time ATT in the case of the Callaway & Sant'Anna model. Modern 
+estimation techniques do result in variable point estimates due to an issue of 
+low power. Therefore, I recommend revisiting the study design given the 
+mounting evidence in favour of several violations of the causal assumptions.
+
+------------------------------------------------------------------------
+
+\clearpage
+
+# Code appendix
+
+```{r ref.label = knitr::all_labels(), echo=TRUE, eval=FALSE}
+```
